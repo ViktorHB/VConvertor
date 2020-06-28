@@ -1,0 +1,149 @@
+﻿<Window 
+    x:Class="VConvertor.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewModel="clr-namespace:VConvertor.ViewModel"
+        xmlns:model="clr-namespace:VConvertor.Model"
+        mc:Ignorable="d"
+        MinHeight="370"
+        MaxHeight="370"
+        MinWidth="800"
+        Height="360"
+        Width="800"
+        Title="{Binding Source={StaticResource Localisation}, Path=[LanguageRes.MainTitle]}"
+        Style="{DynamicResource {x:Type Window}}" d:DesignHeight="369.717">
+    <Window.DataContext>
+        <viewModel:MainWindowViewModel />
+    </Window.DataContext>
+    <StackPanel >
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="{Binding Source={StaticResource Localisation}, Path=[LanguageRes.MenuFile]}">
+                <MenuItem Header="{Binding Source={StaticResource Localisation}, Path=[LanguageRes.MenuFileSelect]}"
+                    Command="{Binding SelectFileCommand}"/>
+                <MenuItem Header="{Binding Source={StaticResource Localisation}, Path=[LanguageRes.MenuFileSave]}"
+                    Command="{Binding SaveFileCommand}"/>
+                <MenuItem  Header="{Binding Source={StaticResource Localisation}, Path=[LanguageRes.MenuFileConvert]}"
+                           Command="{Binding StartConvertCommand}"/>
+                <Separator />
+                <MenuItem Header="{Binding Source={StaticResource Localisation}, Path=[LanguageRes.MenuFileExit]}"
+                          Command="{Binding ExitCommand}"/>
+            </MenuItem>
+            <MenuItem Header="{Binding Source={StaticResource Localisation}, Path=[LanguageRes.MenuLanguage]}">
+                <MenuItem Header="{Binding Source={StaticResource Localisation}, Path=[LanguageRes.MenuLanguageLanguage]}">
+                    <MenuItem Header="{Binding Source={StaticResource Localisation}, Path=[LanguageRes.MenuLanguageLanguageEngl]}"
+                              Command="{Binding SelectLanguageCommand}" 
+                              CommandParameter="{Binding Source={StaticResource Localisation}, Path=[LanguageRes.MenuLanguageLanguageEngl]}"/>
+                    <MenuItem Header="{Binding Source={StaticResource Localisation}, Path=[LanguageRes.MenuLanguageLanguageRu]}"
+                              Command="{Binding SelectLanguageCommand}"
+                              CommandParameter="{Binding Source={StaticResource Localisation}, Path=[LanguageRes.MenuLanguageLanguageRu]}"/>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="{Binding Source={StaticResource Localisation}, Path=[LanguageRes.MenuAbout]}">
+                <MenuItem Header="{Binding Source={StaticResource Localisation}, Path=[LanguageRes.MenuAboutInfo]}"/>
+            </MenuItem>
+            <MenuItem Header="{Binding Source={StaticResource Localisation}, Path=[LanguageRes.MenuStyle]}">
+                <MenuItem Header="{Binding Source={StaticResource Localisation}, Path=[LanguageRes.MenuStyleDefault]}"
+                          Command="{Binding ChangeStyleCommand}" 
+                          CommandParameter="{x:Static model:StyleNames.Default}"/>
+                <MenuItem Header="{Binding Source={StaticResource Localisation}, Path=[LanguageRes.MenuStyleDark]}"
+                          Command="{Binding ChangeStyleCommand}"
+                          CommandParameter="{x:Static model:StyleNames.Dark}"/>
+                <MenuItem Header="{Binding Source={StaticResource Localisation}, Path=[LanguageRes.MenuStyleAnimated]}"
+                          Command="{Binding ChangeStyleCommand}"
+                          CommandParameter="{x:Static model:StyleNames.Animated}"/>
+            </MenuItem>
+        </Menu>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="17*"/>
+                <ColumnDefinition Width="241*"/>
+                <ColumnDefinition Width="77*"/>
+                <ColumnDefinition Width="181*"/>
+                <ColumnDefinition Width="258*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Label 
+               Height="50"
+               Content="{Binding Path=Title, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+               Grid.Column="3"/>
+
+            <TextBox  Grid.Column="0" 
+               Grid.Row="1"
+               Grid.ColumnSpan="4"
+               Text="{Binding Path=InputFile, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+            <Button Grid.Column="4" 
+            Grid.Row="1"
+            Content="{Binding Source={StaticResource Localisation}, Path=[LanguageRes.BtnSelect]}"
+            Command="{Binding SelectFileCommand}"/>
+
+            <TextBox Grid.Column="0" 
+               Grid.Row="2"
+               Grid.ColumnSpan="4"
+               Text="{Binding Path=OutputFile, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+
+            <Button  Grid.Column="4" 
+                Grid.Row="2"
+                Content="{Binding Source={StaticResource Localisation}, Path=[LanguageRes.BtnSave]}"
+                Command="{Binding SaveFileCommand}"/>
+
+            <Label Grid.Column="1" 
+               Grid.Row="3"
+               Content="{Binding Source={StaticResource Localisation}, Path=[LanguageRes.FormatToConvert]}"/>
+
+            <ComboBox
+            Grid.Column="2" 
+            Grid.Row="3"
+            Grid.ColumnSpan="2"
+            ItemsSource="{Binding Formats}"
+            SelectedValue="{Binding SelectedFormat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            SelectedIndex="{Binding SelectedIndexFormat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <Button Grid.Column="4" 
+                Grid.Row="3"
+                Content="{Binding Source={StaticResource Localisation}, Path=[LanguageRes.BtnWatch]}"
+                IsEnabled="{Binding Path=BtnWatchIsEnable,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                Command="{Binding WatchCommand}"/>
+
+            <GroupBox
+                Grid.Column="0" 
+                Grid.Row="4"
+                Grid.ColumnSpan="5"
+                Header="{Binding Source={StaticResource Localisation}, Path=[LanguageRes.ProgressBarHeader]}">
+                <Border>
+                    <ProgressBar 
+                    Height="25"
+                    Maximum="{Binding PbMax, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    Minimum="{Binding PbMin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                    Value="{Binding PbValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Border.Background>Gray</Border.Background>
+                </Border>
+            </GroupBox>
+
+            <Button Grid.Column="0" 
+                Grid.Row="5"
+                Grid.ColumnSpan="2"
+                Content="{Binding Source={StaticResource Localisation}, Path=[LanguageRes.BtnAbort]}"
+                Command="{Binding AbortCommand}"/>
+
+            <Button Grid.Column="4" 
+                Grid.Row="5"
+                Content="{Binding Source={StaticResource Localisation}, Path=[LanguageRes.BtnStart]}"
+                Command="{Binding StartConvertCommand}"/>
+            <Image
+            Grid.Column="2" 
+            Grid.Row="5"
+            Grid.ColumnSpan="2"/>
+        </Grid>
+    </StackPanel>
+</Window>

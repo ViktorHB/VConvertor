@@ -1,0 +1,87 @@
+﻿<UserControl x:Class="VConvertor.UserControls.PlayerControl.ControlPlayer"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:localization="clr-namespace:VConvertor.Localization"
+             mc:Ignorable="d" 
+             d:DesignHeight="500" d:DesignWidth="800" Name="ucPlayer">
+
+    <UserControl.Resources>
+        <Image x:Key="ImgPlay" Source="/Data/Icons/play.png"/>
+        <Image x:Key="ImgPause" Source="/Data/Icons/pause.png"/>
+        <Image x:Key="ImgStop" Source="/Data/Icons/stop.png"/>
+            <localization:LocalisationHelper x:Key="Localisation"/>
+    </UserControl.Resources>
+
+    <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="100"></RowDefinition>
+        </Grid.RowDefinitions>
+        <MediaElement 
+            Name="mePlayer" 
+            Grid.Row="0"
+            Source="{Binding Path=MovieSource, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            LoadedBehavior="Manual" 
+            MouseLeftButtonUp="MePlayer_OnMouseLeftButtonUp"/>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
+                <Button 
+                    Name="btnPlay"
+                        Content="{StaticResource ImgPlay}"
+                        Width="25"
+                        Height="25" 
+                        Click="BtnPlay_OnClick"
+                        ToolTip="{Binding Source={StaticResource Localisation}, Path=[LanguageRes.WBntPlayToolTip]}"
+                        Command="{Binding BtnPlayCommand}"
+                        CommandParameter="{Binding Position}"/>
+                <Button 
+                    Name="btnPause"
+                    Content="{StaticResource ImgPause}"
+                    ToolTip="{Binding Source={StaticResource Localisation}, Path=[LanguageRes.WBntPauseToolTip]}"
+                    Click="BtnPause_OnClick"
+                    Width="25"
+                    Height="25"/>
+                <Button 
+                    Name="btnStop"
+                    Content="{StaticResource ImgStop}"
+                    Click="BtnStop_OnClick"
+                    ToolTip="{Binding Source={StaticResource Localisation}, Path=[LanguageRes.WBntStopToolTip]}"
+                    Width="25" 
+                    Height="25" />
+            </StackPanel>
+            <Label Grid.Row="0"
+                   Grid.Column="1"
+                   Grid.ColumnSpan="2" 
+                   Content="{Binding Path=MovieName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                   Foreground="Blue"/>
+            <Slider
+                Name="sProgress"
+                ValueChanged="SProgress_OnValueChanged"
+                Grid.Row="1"
+                Grid.Column="0"
+                Grid.ColumnSpan="3" 
+                Height="5"
+                Value="{Binding Path=Position, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                Minimum="{Binding Path=MinPosition, Mode=OneTime, UpdateSourceTrigger=PropertyChanged}"
+                Maximum="{Binding Path=MaxPosition, Mode=OneTime, UpdateSourceTrigger=PropertyChanged}"/>
+        </Grid>
+    </Grid>
+</UserControl>
+
+
+
+
+
+
+
